@@ -6,7 +6,7 @@ import telebot
 
 # Pobranie tokenu bota z Rendera (zmienna środowiskowa)
 TOKEN = os.getenv("BOT_TOKEN")
-CHAT_ID = "TWOJE_CHAT_ID"  # Wpisz swoje ID czatu (opis poniżej)
+CHAT_ID = os.getenv("CHAT_ID")  # Pobieramy ID czatu z zmiennej środowiskowej
 bot = telebot.TeleBot(TOKEN)
 
 # Słowa kluczowe do monitorowania
@@ -42,7 +42,13 @@ def send_telegram_message(title, link):
     }
     requests.post(url, data=data)
 
-# Główna pętla - bot sprawdza OLX co 5 minut
-while True:
-    fetch_olx()
-    time.sleep(300)  # Czekaj 5 minut
+# Funkcja uruchamiająca polling (sprawdzanie nowych ogłoszeń co 5 minut)
+def start_polling():
+    while True:
+        fetch_olx()
+        time.sleep(300)  # Czekaj 5 minut
+
+# Uruchomienie bota
+if __name__ == "__main__":
+    # Uruchomienie polling
+    start_polling()
